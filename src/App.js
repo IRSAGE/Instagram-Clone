@@ -1,22 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Post from "./Components/Post";
+import { db } from "./firebase";
 
 function App() {
-  const [posts, setPosts] = useState([
-    {
-      username: "IR~SAGE",
-      caption: "Wow First Caption",
-      image:
-        "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8aHVtYW58ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
-    },
-    {
-      username: "IR~SAGE",
-      caption: "Wow First Caption",
-      image:
-        "https://i.pinimg.com/originals/ca/76/0b/ca760b70976b52578da88e06973af542.jpg",
-    },
-  ]);
+  const [posts, setPosts] = useState([]);
+  // useEffect Runs A piece of code based on a specific condition
+  //nuns everytime the variable changes and once when the  app component runs
+  useEffect(() => {
+    db.collection("posts").onSnapshot((snapshot) => {
+      //every time a new post is added ,this code runs...
+      setPosts(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          post: doc.data(),
+        }))
+      );
+    });
+  });
 
   return (
     <div className="app">
@@ -27,11 +28,12 @@ function App() {
           alt=""
         />
       </div>
-      {posts.map((post) => (
+      {posts.map(({ id, post }) => (
         <Post
+          key={id}
           username={post.username}
           caption={post.caption}
-          image={post.image}
+          image={post.imageUrl}
         />
       ))}
     </div>
