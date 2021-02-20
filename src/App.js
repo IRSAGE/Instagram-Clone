@@ -7,6 +7,7 @@ import Post from "./Components/Post";
 import { auth, db } from "./firebase";
 import { Button, Input } from "@material-ui/core";
 import ImageUpload from "./Components/ImageUpload";
+import InstagramEmbed from "react-instagram-embed";
 
 //Material Ui Styling
 function getModalStyle() {
@@ -184,14 +185,35 @@ function App() {
         )}
       </div>
 
-      {posts.map(({ id, post }) => (
-        <Post
-          key={id}
-          username={post.username}
-          caption={post.caption}
-          image={post.imageUrl}
-        />
-      ))}
+      <div className="app__posts">
+        <div className="app__postsLeft">
+          {posts.map(({ id, post }) => (
+            <Post
+              key={id}
+              username={post.username}
+              caption={post.caption}
+              image={post.imageUrl}
+            />
+          ))}
+        </div>
+
+        <div className="app__postsRight">
+          <InstagramEmbed
+            url="https://www.instagram.com/p/CBJG3qhhRQn/"
+            clientAccessToken='123|456'
+            maxWidth={320}
+            hideCaption={false}
+            containerTagName="div"
+            protocol=""
+            injectScript
+            onLoading={() => {}}
+            onSuccess={() => {}}
+            onAfterRender={() => {}}
+            onFailure={() => {}}
+          />
+        </div>
+      </div>
+
       {user?.displayName ? (
         <ImageUpload username={user.displayName} />
       ) : (

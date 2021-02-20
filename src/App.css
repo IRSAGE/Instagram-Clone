@@ -24,4 +24,12 @@
   flex-direction: column;
   
 }
+.app__posts{
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.app__postsRight{
+  margin-left: 20px;
+}
 
