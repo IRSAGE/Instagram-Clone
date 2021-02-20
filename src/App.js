@@ -6,6 +6,7 @@ import Modal from "@material-ui/core/Modal";
 import Post from "./Components/Post";
 import { auth, db } from "./firebase";
 import { Button, Input } from "@material-ui/core";
+import ImageUpload from "./Components/ImageUpload";
 
 //Material Ui Styling
 function getModalStyle() {
@@ -61,15 +62,17 @@ function App() {
   }, [user, username]);
 
   useEffect(() => {
-    db.collection("posts").onSnapshot((snapshot) => {
-      //every time a new post is added ,this code runs...
-      setPosts(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          post: doc.data(),
-        }))
-      );
-    });
+    db.collection("posts")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        //every time a new post is added ,this code runs...
+        setPosts(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            post: doc.data(),
+          }))
+        );
+      });
   });
 
   const handleClose = () => {
@@ -98,7 +101,7 @@ function App() {
     auth
       .signInWithEmailAndPassword(email, password)
       .catch((error) => alert(error.message));
-    setOpenSignIn(false); 
+    setOpenSignIn(false);
   };
 
   return (
@@ -170,15 +173,16 @@ function App() {
           src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
           alt=""
         />
+
+        {user ? (
+          <Button onClick={() => auth.signOut()}>LogOut</Button>
+        ) : (
+          <div className="app__loginContainer">
+            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+            <Button onClick={signUp}>Sign Up</Button>
+          </div>
+        )}
       </div>
-      {user ? (
-        <Button onClick={() => auth.signOut()}>LogOut</Button>
-      ) : (
-        <div className="app__loginContainer">
-          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-          <Button onClick={signUp}>Sign Up</Button>
-        </div>
-      )}
 
       {posts.map(({ id, post }) => (
         <Post
@@ -188,6 +192,11 @@ function App() {
           image={post.imageUrl}
         />
       ))}
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName} />
+      ) : (
+        <h3>Login To Post A Strory</h3>
+      )}
     </div>
   );
 }
