@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-
+import InstagramEmbed from "react-instagram-embed";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Post from "./Components/Post";
 import { auth, db } from "./firebase";
 import { Button, Input } from "@material-ui/core";
 import ImageUpload from "./Components/ImageUpload";
-import InstagramEmbed from "react-instagram-embed";
 
 //Material Ui Styling
 function getModalStyle() {
@@ -190,6 +189,8 @@ function App() {
           {posts.map(({ id, post }) => (
             <Post
               key={id}
+              postId={id}
+              user={user}
               username={post.username}
               caption={post.caption}
               image={post.imageUrl}
@@ -199,8 +200,8 @@ function App() {
 
         <div className="app__postsRight">
           <InstagramEmbed
-            url="https://www.instagram.com/p/CBJG3qhhRQn/"
-            clientAccessToken='123|456'
+            url="https://instagr.am/p/Zw9o4/"
+            clientAccessToken="123|456"
             maxWidth={320}
             hideCaption={false}
             containerTagName="div"

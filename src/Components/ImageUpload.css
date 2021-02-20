@@ -1,7 +1,7 @@
 .imageupload{
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
@@ -12,4 +12,10 @@
 
 .imageupload__progress{
     width: 100%;
+}
+
+.input__caption{
+    border: none;
+    padding: 10px;
+    outline-width: 0;
 }
