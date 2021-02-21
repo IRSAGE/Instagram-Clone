@@ -1,11 +1,14 @@
-import { Avatar } from "@material-ui/core";
+import { Avatar, IconButton } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import "./Post.css";
 import avatar from "./avatar.png";
 import { db } from "../firebase";
 import firebase from "firebase";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import UpdateIcon from "@material-ui/icons/Update";
+import moment from "moment";
 
-function Post({ username, caption, image, postId, user }) {
+function Post({ username, caption, image, postId, user, timestamp }) {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
@@ -16,7 +19,7 @@ function Post({ username, caption, image, postId, user }) {
         .collection("posts")
         .doc(postId)
         .collection("comments")
-        .orderBy("timestamp", "desc")
+        .orderBy("timestamp", "asc")
         .onSnapshot((snapshot) => {
           setComments(snapshot.docs.map((doc) => doc.data()));
         });
@@ -40,7 +43,14 @@ function Post({ username, caption, image, postId, user }) {
     <div className="post">
       <div className="post__header">
         <Avatar className="post__avatar" alt={username} src={avatar} />
-        <h3>{username}</h3>
+
+        <div className="post__info">
+          <h4>{username}</h4>
+
+          <p>{`Created on  ${moment
+            .unix(timestamp)
+            .format("MMMM Do , h:mma")}`}</p>
+        </div>
       </div>
       <img className="post__image" src={image} alt="" />
       <h4 className="post__text">
@@ -50,7 +60,7 @@ function Post({ username, caption, image, postId, user }) {
       <div className="post__comments">
         {comments.map((comment) => (
           <p>
-            <strong>{comment.username}</strong>
+            <strong>{comment.username} </strong>
             {comment.text}
           </p>
         ))}

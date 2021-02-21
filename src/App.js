@@ -190,6 +190,7 @@ function App() {
             <Post
               key={id}
               postId={id}
+              timestamp={post.timestamp}
               user={user}
               username={post.username}
               caption={post.caption}
